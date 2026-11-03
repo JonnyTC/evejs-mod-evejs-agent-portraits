@@ -1,0 +1,46 @@
+{
+  "author": {
+    "id": "au-muwl3cbjkr4n",
+    "keyId": "90d34319723f",
+    "name": "JonnyTC"
+  },
+  "category": "修复",
+  "changelog": "",
+  "conflicts": [],
+  "delisted": false,
+  "description": "修「空间站代理人头像全是黑底白字 hi」。根因是头像图片没随分发包过来：图片服务按 `/characters/<id>/portrait` 去 <storeRoot>/images/Character/<id>_<size>.jpg 找文件，找不到就回退成 hi.jpg 占位图；而旧位置 generated/Character 被上游 .gitignore 排除，两个分发包实测该目录 0 条目，只带了清单 generated/agents/manifest.json。本模组在服务端进程里幂等补齐：先导入本机官方客户端的 HTTP 图片缓存（文件名格式完全一致，零成本），剩下的按 agentID 从 images.evetech.net 拉（无鉴权，128 单张约 5 KB，全量 10941 个代理人约 52 MB）。不 patch 任何源码、不动客户端资源，只往运行时图片目录写文件，tmp+rename 保证中断不留半截，随时可重跑。首次启动后台约 10 分钟补齐，不阻塞开机。开关：EVEJS_MOD_AGENT_PORTRAITS=0 停用 / _SIZE=128,256 补两个尺寸（256 约 155 MB）/ _OFFLINE=1 只导入不联网 / _MAX=N 限本次数量。也可手动 node mods/evejs-agent-portraits/tools/fetch.js 补齐。",
+  "displayName": "代理人头像补全 (Agent Portraits)",
+  "downloadUrls": [
+    {
+      "mirror": "github",
+      "priority": 1,
+      "url": "https://github.com/JonnyTC/evejs-mod-evejs-agent-portraits/releases/download/v1.0.0/evejs-agent-portraits-1.0.0.zip"
+    }
+  ],
+  "evejsVersions": [
+    "0.12.9",
+    "261018.x"
+  ],
+  "featured": false,
+  "highlights": [],
+  "history": [],
+  "id": "evejs-agent-portraits",
+  "publishedAt": "2026-11-03",
+  "readme": [
+    "> 一句话：**修掉「每个空间站代理人的头像都是一张黑底白字的 `hi`」**。\n> 服务端源码一个字节不改，客户端资源不动，只往运行时图片目录补文件。",
+    "---"
+  ],
+  "repo": "https://github.com/JonnyTC/evejs-mod-evejs-agent-portraits",
+  "requiresRestart": true,
+  "sha256": "3193cbc8c9619581b4840a42494ccae3eb67ad6463a5ff5afb976ba9aa1ed9da",
+  "sizeBytes": 20459,
+  "tags": [
+    "代理人",
+    "头像",
+    "portrait",
+    "NPC",
+    "客户端资源",
+    "修复"
+  ],
+  "version": "1.0.0"
+}
